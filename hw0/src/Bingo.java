@@ -119,7 +119,7 @@ public class Bingo {
             br.close();
             // output how many 'straight line' are there in the matrix
             System.out.println(straightLines);
-            
+
         }
     }
 }
