@@ -1,0 +1,6 @@
+3,4
+Japan,Korea,qqq,eweq
+Korea,Korea,Japan,Korea
+Japan,Japan,Japan,France
+Japan,Korea,Korea,France
+France,France,France,France
