@@ -20,32 +20,34 @@ public class Percolation {
             }
             br.close();
 
-
-//            Grid root = new Grid(0,0);
-//            Grid grid1 = new Grid(1,1);
-//            Grid grid2 = new Grid(2,2);
-//            Grid grid3 = new Grid(3,3);
-//            Grid grid4 = new Grid(4,4);
-//            grid1.setParent(root);
-//            grid2.union(grid1);
-//            grid1.union(grid4);
-
-
+            boolean stop = false;
             ArrayList<Grid> gridList = new ArrayList<Grid>();
             Grid root = new Grid(0,0);
+            ArrayList<Grid> bottomGrid = new ArrayList<Grid>();
             for(String line:lines){
                 String[] coordinate = line.split(",");
                 Grid grid = new Grid(Integer.parseInt(coordinate[0]),Integer.parseInt(coordinate[1]));
-                if(grid.getX()==1){
-                    grid.setParent(root);
-                    gridList.add(grid);
-                } else {
-                    addGridToList(gridList , grid);
+                addGridToList(gridList , root , grid);
+                if(grid.getX()==num){
+                    bottomGrid.add(grid);
+                }
+                System.out.println(gridList.size());
+
+
+                for(Grid bot:bottomGrid){
+                    if(bot.getRoot()==root){
+                        stop = true;
+                        break;
+                    }
+                }
+
+                if(stop){
+                    System.out.println(line);
+                    break;
                 }
             }
-
-            for(Grid grid:gridList){
-                System.out.println(grid.getRoot().getX() + " , " + grid.getRoot().getY());
+            if(!stop){
+                System.out.println(-1);
             }
 
 
@@ -57,10 +59,14 @@ public class Percolation {
 
     }
 
-    public static void addGridToList(ArrayList<Grid> gridList , Grid newGrid){
-        for(Grid grid:gridList){
-            if(newGrid.isConnected(grid)){
-                grid.union(newGrid);
+    public static void addGridToList(ArrayList<Grid> gridList , Grid root , Grid newGrid){
+        if(newGrid.getX()==1){
+            newGrid.setParent(root);
+        } else {
+            for (Grid grid : gridList) {
+                if (newGrid.isConnected(grid)) {
+                    grid.union(newGrid);
+                }
             }
         }
         gridList.add(newGrid);
