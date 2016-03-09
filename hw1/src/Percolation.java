@@ -44,11 +44,10 @@ public class Percolation {
                     break;
                 }
             }
+
             if(!stop){
                 System.out.println(-1);
             }
-
-
 
         } catch (IOException e){
             System.out.println(e.getMessage());
