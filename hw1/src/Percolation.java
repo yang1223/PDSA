@@ -31,8 +31,6 @@ public class Percolation {
                 if(grid.getX()==num){
                     bottomGrid.add(grid);
                 }
-                System.out.println(gridList.size());
-
 
                 for(Grid bot:bottomGrid){
                     if(bot.getRoot()==root){
@@ -62,19 +60,14 @@ public class Percolation {
     public static void addGridToList(ArrayList<Grid> gridList , Grid root , Grid newGrid){
         if(newGrid.getX()==1){
             newGrid.setParent(root);
-        } else {
-            for (Grid grid : gridList) {
-                if (newGrid.isConnected(grid)) {
-                    grid.union(newGrid);
-                }
+        }
+        for (Grid grid : gridList) {
+            if (newGrid.isConnected(grid)) {
+                grid.union(newGrid);
             }
         }
         gridList.add(newGrid);
     }
-
-
-
-
 
     static class Grid {
 
