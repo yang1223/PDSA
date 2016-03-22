@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by 其昌 on 2016/3/11.
@@ -18,7 +16,7 @@ public class LabelCC {
             int targetX = Integer.parseInt(firstLine[1]) - 1; // index 從0開始所以讀出座標之後要-1
             int targetY = Integer.parseInt(firstLine[2]) - 1;
 
-            int labelCount = 1;
+            int labelCount = 0;
             int[][] labelCC = new int[num][num];
 
             int[] parents = new int[num*num];
@@ -47,7 +45,7 @@ public class LabelCC {
                         // 如果這格的label不是0的話才開始做事情
                         if(i==0 && j==0){
                             // 如果這格是(1,1)的話，label=1
-                            labelCC[i][j] = labelCount;
+                            labelCC[i][j] = ++labelCount;
                         } else if(i == 0){
                             // 如果這格是(1,X)的話，只檢查左邊
                             int labelLeft = labelCC[i][j-1];
@@ -86,43 +84,38 @@ public class LabelCC {
                 }
             }
 
-
-            // 把值改成parents裡面找到的root
-            for(int i = 0 ; i < num ; i++){
-                for(int j = 0 ; j < num ; j++){
-                    labelCC[i][j] = getRoot(parents , labelCC[i][j]);
-                }
-            }
-
-
-//            // 印出parents的對照表
-//            for(int i = 0 ; i < 10 ; i++){
-//                System.out.print(i+" ");
-//            }
-//            System.out.println("");
-//            for(int i = 0 ; i < 10 ; i++){
-//                System.out.print(parents[i]+" ");
-//            }
-//            System.out.println("");
-//            // 印出整個labelCC
+//            // 把值改成parents裡面找到的root
 //            for(int i = 0 ; i < num ; i++){
 //                for(int j = 0 ; j < num ; j++){
-//                    System.out.print(labelCC[i][j]+"\t");
+//                    labelCC[i][j] = getRoot(parents , labelCC[i][j]);
 //                }
-//                System.out.println("");
 //            }
 
+            // 印出parents的對照表
+            for(int i = 0 ; i < 10 ; i++){
+                System.out.print(i+" ");
+            }
+            System.out.println("");
+            for(int i = 0 ; i < 10 ; i++){
+                System.out.print(parents[i]+" ");
+            }
+            System.out.println("");
+            // 印出整個labelCC
+            for(int i = 0 ; i < num ; i++){
+                for(int j = 0 ; j < num ; j++){
+                    System.out.print(labelCC[i][j]+"\t");
+                }
+                System.out.println("");
+            }
 
+            // 印出target的label
             System.out.println(labelCC[targetX][targetY]);
-
-
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
-
 
 
     public static int getRoot(int[] parents , int index){
