@@ -1,7 +1,6 @@
 #Implement Deque
-
+March 25, 2016 2:43 AM
 ```
-
 public class Deque implements Iterable {
 
    public Deque()                           // construct an empty deque
@@ -23,7 +22,6 @@ public class Deque implements Iterable {
    public static void main(String[] args)   // unit testing
 
 }
-
 ```
 
 
