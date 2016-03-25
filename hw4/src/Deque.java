@@ -28,25 +28,47 @@ public class Deque<E> implements Iterable {
         for(int i = size++ ; i > 0 ; i--)
             elementData[i] = elementData[i-1];
         elementData[0] = e;
+        resize();
     }
 
     public void addLast(E e){
         if(e == null) throw new NullPointerException();
         elementData[size++] = e;
+        resize();
     }
 
     public E removeFirst(){
         if(isEmpty()) throw new NoSuchElementException();
         E first = (E) elementData[0];
-        for(int i = 0 ; i < size-2 ; i++)
+        for(int i = 0 ; i < size-1 ; i++)
             elementData[i] = elementData[i+1];
         size--;
+        resize();
         return first;
     }
 
     public E removeLast(){
         if(isEmpty()) throw new NoSuchElementException();
+        resize();
         return (E) elementData[size--];
+    }
+
+
+
+    private void resize(){
+        if(size == elementData.length){
+            Object[] copy = new Object[2*elementData.length];
+            for(int i = 0 ; i < size ; i++){
+                copy[i] = elementData[i];
+            }
+            elementData = copy;
+        } else if (size <= elementData.length/4){
+            Object[] copy = new Object[elementData.length/2];
+            for(int i = 0 ; i < size ; i++){
+                copy[i] = elementData[i];
+            }
+            elementData = copy;
+        }
     }
 
 

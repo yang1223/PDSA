@@ -5,19 +5,27 @@ import java.util.Iterator;
  */
 public class Main {
     public static void main(String[] args) {
-        Deque<Integer> deque = new Deque<>();
-        deque.addLast(1);
-        deque.addLast(2);
-        deque.addFirst(3);
-        System.out.println(deque.size());
-        deque.addFirst(4);
+        Deque<String> deque = new Deque<>();
+
+        for(int i = 0 ; i < 10000 ; i++){
+            deque.addFirst(i+"");
+        }
+
+        for(int i = 0 ; i < 9990 ; i++){
+            deque.removeFirst();
+        }
+
+
         System.out.println(deque.toString());
+
+        System.out.println(deque.size());
 
         System.out.println("====");
 
-        Iterator<Integer> iterator = deque.iterator();
+        Iterator<String> iterator = deque.iterator();
         while(iterator.hasNext())
             System.out.println(iterator.next());
+
 
     }
 }
