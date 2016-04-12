@@ -4,7 +4,7 @@
 public class MyConvexHull {
 
     public static void main(String[] args) {
-        
+
     }
 
 }
