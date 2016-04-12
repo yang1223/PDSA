@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by Yang Chi-Chang on 2016/4/11.
@@ -11,10 +11,22 @@ public class MyConvexHull {
         int num = 10;
         ArrayList<Point2D> points = new ArrayList<Point2D>();
 
+        Stack<Point2D> convexhull = new Stack<Point2D>();
+
         for(int i = 0; i < num ; i++)
             points.add(new Point2D(StdRandom.uniform(),StdRandom.uniform()));
 
         int min = findMinY(points);
+
+        convexhull.push(points.get(min));
+
+        ArrayList<Double> angle = new ArrayList<Double>();
+
+        for(int i = 0 ; i < points.size() ; i++){
+            Point2D p = points.get(i);
+
+        }
+
 
         Point2D p1 = new Point2D(0.5,0.1);
         Point2D p2 = new Point2D(0.8,0.4);
@@ -26,13 +38,25 @@ public class MyConvexHull {
 
 
 
+
+        StdDraw.setCanvasSize(800, 800);
+        StdDraw.setXscale(-0.1, 1.1);
+        StdDraw.setYscale(-0.1, 1.1);
+
         StdDraw.setPenColor(StdDraw.BOOK_BLUE);
-        for(Point2D p:points){
-            StdDraw.filledCircle(p.x() , p.y() , pointSize);
+
+        for(int i = 0 ; i < points.size() ; i++){
+            Point2D p = points.get(i);
+
+            StdDraw.setPenRadius(.025);
+            p.draw();
+            StdDraw.text(p.x() + 0.015 , p.y() + 0.015 , Integer.toString(i) );
+
+
         }
 
         StdDraw.setPenColor(StdDraw.MAGENTA);
-        StdDraw.filledCircle(points.get(min).x() , points.get(min).y() , pointSize + 0.003);
+        points.get(min).draw();
 
 //        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
 //        StdDraw.setPenRadius(.007);
@@ -48,5 +72,7 @@ public class MyConvexHull {
         }
         return min;
     }
+
+
 
 }
