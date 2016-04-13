@@ -7,24 +7,25 @@ public class MyConvexHull {
 
     public static void main(String[] args) {
 
-        double pointSize = 0.008;
         int num = 10;
-        ArrayList<Point2D> points = new ArrayList<Point2D>();
+        Point2D[] points = new Point2D[num];
 
-        Stack<Point2D> convexhull = new Stack<Point2D>();
+//        Stack<Point2D> convexhull = new Stack<Point2D>();
 
         for(int i = 0; i < num ; i++)
-            points.add(new Point2D(StdRandom.uniform(),StdRandom.uniform()));
+            points[i] = new Point2D(StdRandom.uniform(),StdRandom.uniform());
 
         int min = findMinY(points);
 
-        convexhull.push(points.get(min));
+//        convexhull.push(points.get(min));
 
-        ArrayList<Double> angle = new ArrayList<Double>();
 
-        for(int i = 0 ; i < points.size() ; i++){
-            Point2D p = points.get(i);
+        double[] angle = new double[num];
 
+        Point2D start = points[min];
+        for(int i = 0 ; i < points.length ; i++){
+            Point2D p = points[i];
+            angle[i] = angleTo(start,p);
         }
 
 
@@ -45,18 +46,16 @@ public class MyConvexHull {
 
         StdDraw.setPenColor(StdDraw.BOOK_BLUE);
 
-        for(int i = 0 ; i < points.size() ; i++){
-            Point2D p = points.get(i);
+        for(int i = 0 ; i < points.length ; i++){
+            Point2D p = points[i];
 
             StdDraw.setPenRadius(.025);
             p.draw();
-            StdDraw.text(p.x() + 0.015 , p.y() + 0.015 , Integer.toString(i) );
-
-
+            StdDraw.text(p.x() + 0.015 , p.y() + 0.015 , i + " (" + String.format("%.0f" , (angle[i])*180/3.1416) + ")" );
         }
 
         StdDraw.setPenColor(StdDraw.MAGENTA);
-        points.get(min).draw();
+        points[min].draw();
 
 //        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
 //        StdDraw.setPenRadius(.007);
@@ -64,14 +63,27 @@ public class MyConvexHull {
 
     }
 
-    public static int findMinY (ArrayList<Point2D> points){
+    public static int findMinY (Point2D[] points){
         int min = 0;
-        for(int i = 0 ; i < points.size() ; i++){
-            if(Point2D.Y_ORDER.compare(points.get(min),points.get(i))==1)
+        for(int i = 0 ; i < points.length ; i++){
+            if(Point2D.Y_ORDER.compare(points[min] , points[i])==1)
                 min = i;
         }
         return min;
     }
+
+    public static double angleTo(Point2D p1 , Point2D p2) {
+        double dx = p2.x() - p1.x();
+        double dy = p2.y() - p1.y();
+        return Math.atan2(dy, dx);
+    }
+
+    public static double[] quickSort(double[] array) {
+        // TODO: quickSort!
+        return array;
+    }
+
+
 
 
 
