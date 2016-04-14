@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -6,13 +9,129 @@ import java.util.*;
 public class MyConvexHull {
 
     public static void main(String[] args) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(args[0]));
+            double distance = Double.parseDouble(br.readLine());
+            int num = Integer.parseInt(br.readLine());
 
+            distance = 0.3;
+            num = 10;
+            Point2D[] points = new Point2D[num];
+
+
+            for(int i = 0  ; i < num ; i++){
+//                String[] coordinate = br.readLine().split("\\s");
+//                double x = Double.parseDouble(coordinate[0]);
+//                double y = Double.parseDouble(coordinate[1]);
+//                points[i] = new Point2D(x,y);
+                points[i] = new Point2D(Math.random(),Math.random());
+            }
+
+//            for(Point2D p: points)
+//                System.out.println(String.format("(%.3f,%.3f)",p.x(),p.y()));
+
+
+
+            int[] parents = new int[num];
+            for(int i = 0 ; i < parents.length ; i++)
+                parents[i] = i;
+//            printArray(parents);
+
+            for(int i = 0 ; i < num ; i++){
+                Point2D p1 = points[i];
+                for(int j = i+1 ; j < num ; j++){
+                    Point2D p2 = points[j];
+                    if(p1.distanceTo(p2) < distance){
+                        int root1 = getRoot(parents,i);
+                        int root2 = getRoot(parents,j);
+                        if(root1<=root2)
+                            parents[root2] = root1;
+                        else
+                            parents[root1] = root2;
+                    }
+//                    printArray(parents);
+                }
+            }
+//            printArray(parents);
+
+            Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+            for(int i:parents){
+                i = getRoot(parents,i);
+                parents[i] = i;
+                if (map.containsKey(i)) {
+                    map.put(i , map.get(i)+1);
+                } else {
+                    map.put(i , 1);
+                }
+            }
+
+            printArray(parents);
+
+
+            StdDraw.setCanvasSize(800,800);
+            StdDraw.setXscale(-0.1,1.1);
+            StdDraw.setYscale(-0.1,1.1);
+            StdDraw.setPenRadius(0.02);
+            for(int i = 0 ; i < num ; i++) {
+                Point2D p1 = points[i];
+                p1.draw();
+                StdDraw.setPenRadius(0.002);
+                StdDraw.circle(p1.x(), p1.y(), distance / 2.0);
+                StdDraw.setPenRadius(0.02);
+                StdDraw.text(p1.x() + 0.015 , p1.y() + 0.015 , ""+parents[i]+"");
+            }
+            StdDraw.setPenColor(StdDraw.MAGENTA);
+
+            int totalConvexHull = 0;
+            for(Map.Entry<Integer,Integer> entry:map.entrySet()){
+                System.out.println(entry.getKey() + ":" + entry.getValue());
+
+                Point2D[] pointGroup = new Point2D[entry.getValue()];
+                int count = 0;
+                for(int i = 0 ; i < parents.length ; i++){
+                    if(parents[i] == entry.getKey())
+                        pointGroup[count++] = points[i];
+                }
+                if(pointGroup.length > 2){
+                    Point2D[] copyArray = Arrays.copyOf(pointGroup,pointGroup.length);
+                    int[] convex = ConvexHullVertex(pointGroup);
+//                    System.out.println(entry.getKey() + ":" + convex.length);
+                    totalConvexHull += convex.length;
+                    for(int i:convex){
+                        copyArray[i].draw();
+                    }
+                }
+            }
+            System.out.println(totalConvexHull);
+
+
+
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
+    public static int getRoot(int[] parents , int index){
+        while(parents[index]!=index)
+            index = parents[index];
+        return index;
+    }
+
+    public static void printArray(int[] array){
+        String sp = "";
+        System.out.print("[");
+        for(int i:array){
+            System.out.print(sp + i);
+            sp = ",";
+        }
+        System.out.println("]");
+    }
 
     public static int[] ConvexHullVertex(Point2D[] points) {
-
 
         ArrayList<Point2D> array = new ArrayList<Point2D>();
         for(Point2D p:points){
