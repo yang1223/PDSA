@@ -15,9 +15,8 @@ public class MyConvexHull {
             int num = Integer.parseInt(br.readLine());
 
             distance = 0.3;
-            num = 10;
+            num = 12;
             Point2D[] points = new Point2D[num];
-
 
             for(int i = 0  ; i < num ; i++){
 //                String[] coordinate = br.readLine().split("\\s");
@@ -25,11 +24,8 @@ public class MyConvexHull {
 //                double y = Double.parseDouble(coordinate[1]);
 //                points[i] = new Point2D(x,y);
                 points[i] = new Point2D(Math.random(),Math.random());
+                System.out.println(String.format("%d:(%.3f,%.3f)",i,points[i].x(),points[i].y()));
             }
-
-//            for(Point2D p: points)
-//                System.out.println(String.format("(%.3f,%.3f)",p.x(),p.y()));
-
 
 
             int[] parents = new int[num];
@@ -39,7 +35,7 @@ public class MyConvexHull {
 
             for(int i = 0 ; i < num ; i++){
                 Point2D p1 = points[i];
-                for(int j = i+1 ; j < num ; j++){
+                for(int j = 0 ; j < num ; j++){
                     Point2D p2 = points[j];
                     if(p1.distanceTo(p2) < distance){
                         int root1 = getRoot(parents,i);
@@ -49,24 +45,24 @@ public class MyConvexHull {
                         else
                             parents[root1] = root2;
                     }
-//                    printArray(parents);
                 }
             }
-//            printArray(parents);
+
+            for(int i = 0 ; i < parents.length ; i++){
+                parents[i] = getRoot(parents,i);
+            }
+
+            System.out.print("label:");
+            printArray(parents);
 
             Map<Integer,Integer> map = new HashMap<Integer,Integer>();
             for(int i:parents){
-                i = getRoot(parents,i);
-                parents[i] = i;
                 if (map.containsKey(i)) {
                     map.put(i , map.get(i)+1);
                 } else {
                     map.put(i , 1);
                 }
             }
-
-            printArray(parents);
-
 
             StdDraw.setCanvasSize(800,800);
             StdDraw.setXscale(-0.1,1.1);
@@ -84,7 +80,7 @@ public class MyConvexHull {
 
             int totalConvexHull = 0;
             for(Map.Entry<Integer,Integer> entry:map.entrySet()){
-                System.out.println(entry.getKey() + ":" + entry.getValue());
+                System.out.println("label="+entry.getKey() + " : " + entry.getValue());
 
                 Point2D[] pointGroup = new Point2D[entry.getValue()];
                 int count = 0;
@@ -95,24 +91,18 @@ public class MyConvexHull {
                 if(pointGroup.length > 2){
                     Point2D[] copyArray = Arrays.copyOf(pointGroup,pointGroup.length);
                     int[] convex = ConvexHullVertex(pointGroup);
-//                    System.out.println(entry.getKey() + ":" + convex.length);
                     totalConvexHull += convex.length;
                     for(int i:convex){
                         copyArray[i].draw();
                     }
                 }
             }
-            System.out.println(totalConvexHull);
 
-
-
-
-
+//            System.out.println(totalConvexHull);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static int getRoot(int[] parents , int index){
