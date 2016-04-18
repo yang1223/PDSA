@@ -115,6 +115,8 @@ public class Player implements Comparable<Player>{
                             return 1;
                         } else if (smallPair1 > smallPair2) {
                             return -1;
+                        } else {
+                            return -1;
                         }
                     }
                 case one_pair:
@@ -123,6 +125,8 @@ public class Player implements Comparable<Player>{
                     if (pair1 < pair2) {
                         return 1;
                     } else if (pair1 > pair2) {
+                        return -1;
+                    } else {
                         return -1;
                     }
                 case high_card:
