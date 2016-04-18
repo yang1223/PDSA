@@ -10,15 +10,6 @@ public class Game{
     // Judge System will Execute The Program Here
     public static void main(String[] args) throws Exception{
 
-
-//        HashSet<String> set = new HashSet<String>();
-//        set.add("Spades");
-//        set.add("Hearts");
-//        set.add("Clubs");
-//        set.add("Diamonds");
-//
-//        System.out.println(Collections.max(set , Player.suitOrder));
-
         try {
             BufferedReader br = new BufferedReader(new FileReader(args[0]));
 
@@ -41,18 +32,10 @@ public class Game{
                 player.setCards(cardsArray);
             }
 
-            Player[] playerArray2 = new Player[2];
-            playerArray2[0] = playerArray[4];
-            playerArray2[1] = playerArray[5];
-
             Arrays.sort(playerArray);
 
             for (Player p:playerArray)
                 System.out.println(p.getName());
-
-//            Arrays.sort(playerArray2);
-//            System.out.println(playerArray2[0].getName());
-//            System.out.println(playerArray2[1].getName());
 
         } catch (IOException e){
             System.out.println(e.getMessage());

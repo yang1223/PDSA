@@ -12,10 +12,9 @@ public class Player implements Comparable<Player>{
     private CardType cardType;
     public CardQuery cardQuery = new CardQuery();
 
-    private static final SuitOrder suitOrder = new SuitOrder();
-    private static final FaceOrder faceOrder = new FaceOrder();
-    private static final CardTypeOrder cardTypeOrder = new CardTypeOrder();
-
+    private static final SuitOrder SUIT_ORDER = new SuitOrder();
+    private static final FaceOrder FACE_ORDER = new FaceOrder();
+    private static final CardTypeOrder CARD_TYPE_ORDER = new CardTypeOrder();
 
     // DO NOT MODIFY THIS
     public Player(String name) {
@@ -86,58 +85,58 @@ public class Player implements Comparable<Player>{
 
         this.setCardType();
         that.setCardType();
-        int result = cardTypeOrder.compare(this.getCardType(), that.getCardType());
+        int result = CARD_TYPE_ORDER.compare(this.getCardType(), that.getCardType());
         if (result != 0){
             return result;
         } else {
             // broke ties
             switch (this.getCardType()) {
                 case full_house:
-                    String max1 = Collections.max(this.cardQuery.getThrees() , faceOrder);
-                    String max2 = Collections.max(that.cardQuery.getThrees() , faceOrder);
-                    result = faceOrder.compare(max1 , max2);
+                    String max1 = Collections.max(this.cardQuery.getThrees() , FACE_ORDER);
+                    String max2 = Collections.max(that.cardQuery.getThrees() , FACE_ORDER);
+                    result = FACE_ORDER.compare(max1 , max2);
                     return result;
 
                 case flush:
-                    String flush1 = Collections.max(this.cardQuery.getSuitSet() , faceOrder);
-                    String flush2 = Collections.max(that.cardQuery.getSuitSet() , faceOrder);
-                    result = suitOrder.compare(flush1 , flush2);
+                    String flush1 = Collections.max(this.cardQuery.getSuitSet() , FACE_ORDER);
+                    String flush2 = Collections.max(that.cardQuery.getSuitSet() , FACE_ORDER);
+                    result = SUIT_ORDER.compare(flush1 , flush2);
                     if (result != 0) {
                         return result;
                     } else {
                         Set<String> suit1 = this.cardQuery.getSuitSet(flush1);
                         Set<String> suit2 = that.cardQuery.getSuitSet(flush2);
-                        result = suitOrder.compare(Collections.max(suit1,suitOrder) , Collections.max(suit2,suitOrder));
+                        result = SUIT_ORDER.compare(Collections.max(suit1, SUIT_ORDER) , Collections.max(suit2, SUIT_ORDER));
                         return result;
                     }
 
                 case two_pair:
                 case one_pair:
-                    String pair1 = Collections.max(this.cardQuery.getPairs() , faceOrder);
-                    String pair2 = Collections.max(that.cardQuery.getPairs() , faceOrder);
-                    result = faceOrder.compare(pair1 , pair2);
+                    String pair1 = Collections.max(this.cardQuery.getPairs() , FACE_ORDER);
+                    String pair2 = Collections.max(that.cardQuery.getPairs() , FACE_ORDER);
+                    result = FACE_ORDER.compare(pair1 , pair2);
                     if (result != 0) {
                        return result;
                     } else {
                         Set<String> suit1 = this.cardQuery.getSuitSet(pair1);
                         Set<String> suit2 = that.cardQuery.getSuitSet(pair1);
-                        result = suitOrder.compare(Collections.max(suit1,suitOrder) , Collections.max(suit2,suitOrder));
+                        result = SUIT_ORDER.compare(Collections.max(suit1, SUIT_ORDER) , Collections.max(suit2, SUIT_ORDER));
                         return result;
                     }
 
                 case high_card:
                 case straight:
 
-                    String high_card1 = Collections.max(this.cardQuery.getOnes() , faceOrder);
-                    String high_card2 = Collections.max(that.cardQuery.getOnes() , faceOrder);
+                    String high_card1 = Collections.max(this.cardQuery.getOnes() , FACE_ORDER);
+                    String high_card2 = Collections.max(that.cardQuery.getOnes() , FACE_ORDER);
 
-                    result = faceOrder.compare(high_card1 , high_card2);
+                    result = FACE_ORDER.compare(high_card1 , high_card2);
                     if (result != 0) {
                         return result;
                     } else {
                         Set<String> suit1 = this.cardQuery.getSuitSet(high_card1);
                         Set<String> suit2 = that.cardQuery.getSuitSet(high_card2);
-                        result = suitOrder.compare(Collections.max(suit1,suitOrder) , Collections.max(suit2,suitOrder));
+                        result = SUIT_ORDER.compare(Collections.max(suit1, SUIT_ORDER) , Collections.max(suit2, SUIT_ORDER));
                         return result;
                     }
             }
@@ -233,15 +232,6 @@ public class Player implements Comparable<Player>{
             Set<String> suitSet = new HashSet<String>();
             for (Card c:cards){
                 suitSet.add(c.getSuit());
-            }
-            return suitSet;
-        }
-
-        public Set<String> getSuitSet(Set<String> faceSet){
-            Set<String> suitSet = new HashSet<String>();
-            for (Card c:cards){
-                if (faceSet.contains(c.getFace()))
-                    suitSet.add(c.getSuit());
             }
             return suitSet;
         }

@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class Card implements Comparable<Card> {
 
@@ -6,6 +8,8 @@ public class Card implements Comparable<Card> {
 	private String suit; // should be one of [Spades, Hearts, Diamonds, Clubs]
 	
     public static final Comparator<Card> SUIT_ORDER = new SuitOrder();
+
+    private static final Comparator<Card> FACE_ORDER = new FaceOrder();
 
     // DO NOT MODIFY THIS
     public Card(String face, String suit){
@@ -28,60 +32,55 @@ public class Card implements Comparable<Card> {
         // complete this function so the Card can be sorted
         // (you must consider both face and suit)
 
-        String face1 = this.getFace();
-        String face2 = that.getFace();
-        if (face1.equals(face2)) {
-            return SUIT_ORDER.compare(this , that);
-        } else if (face1.equals("A")) {
-            return 1;
-        } else if (face1.equals("K")) {
-            if (face2.equals("A")) return -1;
-            else return 1;
-        } else if (face1.equals("Q")) {
-            if (face2.equals("A")) return -1;
-            else if (face2.equals("K")) return -1;
-            else return 1;
-        } else if (face1.equals("J")) {
-            if (face2.equals("A")) return -1;
-            else if (face2.equals("K")) return -1;
-            else if (face2.equals("Q")) return -1;
-            else return 1;
+        int result = FACE_ORDER.compare(this , that);
+        if(result != 0) {
+            return result;
         } else {
-            try {
-                Integer.parseInt(face2);
-            } catch (NumberFormatException e){
-                return -1;
-            }
-            if (Integer.parseInt(face1) > Integer.parseInt(face2)) return 1;
-            else return -1;
+            return SUIT_ORDER.compare(this , that);
         }
-    }  
+    }
 
     // TODO
     private static class SuitOrder implements Comparator<Card> {
-        public int compare(Card c1, Card c2) {
 
-            // complete this function so the Card can be sorted according to the suit
-
-            String suit1 = c1.getSuit();
-            String suit2 = c2.getSuit();
-            if (suit1.equals("Spades")) {
-                if (suit2.equals("Spades")) return 0;
-                else return 1;
-            } else if (suit1.equals("Hearts")) {
-                if (suit2.equals("Spades")) return -1;
-                else if (suit2.equals("Hearts")) return 0;
-                else return 1;
-            } else if (suit1.equals("Diamonds")) {
-                if (suit2.equals("Clubs")) return 1;
-                else if (suit2.equals("Diamonds")) return 0;
-                else return -1;
-            } else if (suit1.equals("Clubs")) {
-                if (suit2.equals("Clubs")) return 0;
-                else return -1;
+        private static List<String> order;
+        SuitOrder() {
+            String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+            order = new ArrayList<String>();
+            for (String suit : suits) {
+                order.add(suit);
             }
-            return 0;
         }
-    }   
+
+        @Override
+        public int compare(Card c1, Card c2) {
+            int suit_1 = order.indexOf(c1.getSuit());
+            int suit_2 = order.indexOf(c2.getSuit());
+            if (suit_1 < suit_2) return 1;
+            else if (suit_1 > suit_2) return -1;
+            else return 0;
+        }
+
+    }
+
+    private static class FaceOrder implements Comparator<Card> {
+        private static List<String> order;
+        FaceOrder() {
+            String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","1"};
+            order = new ArrayList<String>();
+            for (String face : faces) {
+                order.add(face);
+            }
+        }
+
+        @Override
+        public int compare(Card c1, Card c2) {
+            int face_1 = order.indexOf(c1.getFace());
+            int face_2 = order.indexOf(c2.getFace());
+            if (face_1 < face_2) return 1;
+            else if (face_1 > face_2) return -1;
+            else return 0;
+        }
+    }
 }
 
