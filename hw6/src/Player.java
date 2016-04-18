@@ -11,8 +11,11 @@ public class Player implements Comparable<Player>{
 
     private CardType cardType;
     public CardQuery cardQuery = new CardQuery();
-//    private static final CardLevel cardLevel = new CardLevel();
-    public static final CardLevel cardLevel = new CardLevel();
+
+    private static final SuitOrder suitOrder = new SuitOrder();
+    private static final FaceOrder faceOrder = new FaceOrder();
+    private static final CardTypeOrder cardTypeOrder = new CardTypeOrder();
+
 
     // DO NOT MODIFY THIS
     public Player(String name) {
@@ -51,6 +54,13 @@ public class Player implements Comparable<Player>{
             // (2,1,1,1)
             cardType = CardType.one_pair;
         } else if (faces.size() == 5){
+
+            // check for flush
+            if (cardQuery.getSuitSet().size() == 1) {
+                cardType = CardType.flush;
+                return;
+            }
+
             // check for straight
             String[] straights = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","1"};
             Set<String> faceSet = faces.keySet();
@@ -65,11 +75,6 @@ public class Player implements Comparable<Player>{
                 }
             }
 
-            // check for flush
-            if (cardQuery.getSuitSet().size() == 1) {
-                cardType = CardType.flush;
-                return;
-            }
             // high card otherwise
             cardType = CardType.high_card;
         }
@@ -81,61 +86,59 @@ public class Player implements Comparable<Player>{
 
         this.setCardType();
         that.setCardType();
-        int type1 = cardLevel.byCardType(this.getCardType());
-        int type2 = cardLevel.byCardType(that.getCardType());
-        if (type1 < type2){
-            return 1;
-        } else if (type1 > type2) {
-            return -1;
+        int result = cardTypeOrder.compare(this.getCardType(), that.getCardType());
+        if (result != 0){
+            return result;
         } else {
             // broke ties
             switch (this.getCardType()) {
                 case full_house:
-                    int threes1 = cardLevel.byFace(Collections.max(this.cardQuery.getThrees() , cardLevel));
-                    int threes2 = cardLevel.byFace(Collections.max(that.cardQuery.getThrees() , cardLevel));
-                    if (threes1 < threes2) return 1;
-                    else return -1;
+                    String max1 = Collections.max(this.cardQuery.getThrees() , faceOrder);
+                    String max2 = Collections.max(that.cardQuery.getThrees() , faceOrder);
+                    result = faceOrder.compare(max1 , max2);
+                    return result;
+
+                case flush:
+                    String flush1 = Collections.max(this.cardQuery.getSuitSet() , faceOrder);
+                    String flush2 = Collections.max(that.cardQuery.getSuitSet() , faceOrder);
+                    result = suitOrder.compare(flush1 , flush2);
+                    if (result != 0) {
+                        return result;
+                    } else {
+                        Set<String> suit1 = this.cardQuery.getSuitSet(flush1);
+                        Set<String> suit2 = that.cardQuery.getSuitSet(flush2);
+                        result = suitOrder.compare(Collections.max(suit1,suitOrder) , Collections.max(suit2,suitOrder));
+                        return result;
+                    }
+
                 case two_pair:
-                    String max1 = Collections.max(this.cardQuery.getPairs() , cardLevel);
-                    String max2 = Collections.max(that.cardQuery.getPairs() , cardLevel);
-                    int largePair1 = cardLevel.byFace(max1);
-                    int largePair2 = cardLevel.byFace(max2);
-                    if (largePair1 < largePair2) {
-                        return 1;
-                    } else if (largePair1 > largePair2) {
-                        return -1;
-                    } else {
-                        Set<String> set1 = this.cardQuery.getPairs();
-                        Set<String> set2 = that.cardQuery.getPairs();
-                        set1.remove(max1);
-                        set2.remove(max2);
-                        int smallPair1 = cardLevel.byFace(Collections.max(set1 , cardLevel));
-                        int smallPair2 = cardLevel.byFace(Collections.max(set2 , cardLevel));
-                        if (smallPair1 < smallPair2) {
-                            return 1;
-                        } else if (smallPair1 > smallPair2) {
-                            return -1;
-                        } else {
-                            return -1;
-                        }
-                    }
                 case one_pair:
-                    int pair1 = cardLevel.byFace(Collections.max(this.cardQuery.getPairs() , cardLevel));
-                    int pair2 = cardLevel.byFace(Collections.max(that.cardQuery.getPairs() , cardLevel));
-                    if (pair1 < pair2) {
-                        return 1;
-                    } else if (pair1 > pair2) {
-                        return -1;
+                    String pair1 = Collections.max(this.cardQuery.getPairs() , faceOrder);
+                    String pair2 = Collections.max(that.cardQuery.getPairs() , faceOrder);
+                    result = faceOrder.compare(pair1 , pair2);
+                    if (result != 0) {
+                       return result;
                     } else {
-                        return -1;
+                        Set<String> suit1 = this.cardQuery.getSuitSet(pair1);
+                        Set<String> suit2 = that.cardQuery.getSuitSet(pair1);
+                        result = suitOrder.compare(Collections.max(suit1,suitOrder) , Collections.max(suit2,suitOrder));
+                        return result;
                     }
+
                 case high_card:
-                    int one1 = cardLevel.byFace(Collections.max(this.cardQuery.getOnes() , cardLevel));
-                    int one2 = cardLevel.byFace(Collections.max(that.cardQuery.getOnes() , cardLevel));
-                    if (one1 < one2) {
-                        return 1;
-                    } else if (one1 > one2) {
-                        return -1;
+                case straight:
+
+                    String high_card1 = Collections.max(this.cardQuery.getOnes() , faceOrder);
+                    String high_card2 = Collections.max(that.cardQuery.getOnes() , faceOrder);
+
+                    result = faceOrder.compare(high_card1 , high_card2);
+                    if (result != 0) {
+                        return result;
+                    } else {
+                        Set<String> suit1 = this.cardQuery.getSuitSet(high_card1);
+                        Set<String> suit2 = that.cardQuery.getSuitSet(high_card2);
+                        result = suitOrder.compare(Collections.max(suit1,suitOrder) , Collections.max(suit2,suitOrder));
+                        return result;
                     }
             }
         }
@@ -144,15 +147,50 @@ public class Player implements Comparable<Player>{
 
 
 
-
-    private static class CardLevel implements Comparator<String>{
-        private static List<String> suitOrder;
-        private static List<String> faceOrder;
-        private static List<CardType> cartTypeOrder;
-
-        CardLevel() {
+    private static class SuitOrder implements Comparator<String> {
+        private static List<String> order;
+        SuitOrder() {
             String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+            order = new ArrayList<String>();
+            for (String suit : suits) {
+                order.add(suit);
+            }
+        }
+
+        @Override
+        public int compare(String suit1, String suit2) {
+            int suit_1 = order.indexOf(suit1);
+            int suit_2 = order.indexOf(suit2);
+            if (suit_1 < suit_2) return 1;
+            else if (suit_1 > suit_2) return -1;
+            else return 0;
+        }
+    }
+
+    private static class FaceOrder implements Comparator<String> {
+        private static List<String> order;
+        FaceOrder() {
             String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","1"};
+            order = new ArrayList<String>();
+            for (String face : faces) {
+                order.add(face);
+            }
+        }
+
+        @Override
+        public int compare(String face1, String face2) {
+            int face_1 = order.indexOf(face1);
+            int face_2 = order.indexOf(face2);
+            if (face_1 < face_2) return 1;
+            else if (face_1 > face_2) return -1;
+            else return 0;
+        }
+    }
+
+
+    private static class CardTypeOrder implements Comparator<CardType> {
+        private static List<CardType> order;
+        CardTypeOrder() {
             CardType[] cardTypes = {
                     CardType.full_house,
                     CardType.flush,
@@ -161,42 +199,22 @@ public class Player implements Comparable<Player>{
                     CardType.one_pair,
                     CardType.high_card
             };
-
-            suitOrder = new ArrayList<String>();
-            faceOrder = new ArrayList<String>();
-            cartTypeOrder = new ArrayList<CardType>();
-
-            // add greater item with greater index
-            // eg. A = 13 , K = 12 , ...
-            for (String suit : suits) suitOrder.add(suit);
-
-            for (String face : faces) faceOrder.add(face);
-
-            for (CardType cardType1 : cardTypes) cartTypeOrder.add(cardType1);
-        }
-
-        public int bySuit(String suit) {
-            return suitOrder.indexOf(suit);
-        }
-
-        public int byFace(String face) {
-            return faceOrder.indexOf(face);
-        }
-
-        public int byCardType(CardType cardType) {
-            return cartTypeOrder.indexOf(cardType);
+            order = new ArrayList<CardType>();
+            for (CardType cardType : cardTypes) {
+                order.add(cardType);
+            }
         }
 
         @Override
-        public int compare(String face1, String face2) {
-            // comparator of faces
-            int faceLevel_1 = byFace(face1);
-            int faceLevel_2 = byFace(face2);
-            if (faceLevel_1 < faceLevel_2) return 1;
-            else if (faceLevel_1 > faceLevel_2) return -1;
+        public int compare(CardType cardType1, CardType cardType2) {
+            int cardType_1 = order.indexOf(cardType1);
+            int cardType_2 = order.indexOf(cardType2);
+            if (cardType_1 < cardType_2) return 1;
+            else if (cardType_1 > cardType_2) return -1;
             else return 0;
         }
     }
+
 
     private class CardQuery {
 
@@ -215,6 +233,24 @@ public class Player implements Comparable<Player>{
             Set<String> suitSet = new HashSet<String>();
             for (Card c:cards){
                 suitSet.add(c.getSuit());
+            }
+            return suitSet;
+        }
+
+        public Set<String> getSuitSet(Set<String> faceSet){
+            Set<String> suitSet = new HashSet<String>();
+            for (Card c:cards){
+                if (faceSet.contains(c.getFace()))
+                    suitSet.add(c.getSuit());
+            }
+            return suitSet;
+        }
+
+        public Set<String> getSuitSet(String face){
+            Set<String> suitSet = new HashSet<String>();
+            for (Card c:cards){
+                if (face.equals(c.getFace()))
+                    suitSet.add(c.getSuit());
             }
             return suitSet;
         }
@@ -250,10 +286,5 @@ public class Player implements Comparable<Player>{
         }
 
     }
-
-
-
-
-
 }
 

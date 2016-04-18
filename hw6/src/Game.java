@@ -11,21 +11,16 @@ public class Game{
     public static void main(String[] args) throws Exception{
 
 
-//        HashSet<String> set = new HashSet<>();
-////        set.add("A");
-////        set.add("K");
-////        set.add("Q");
-////        set.add("J");
-////        set.add("10");
-////        set.add("9");
-////        set.add("8");
-////        set.add("7");
-////        set.add("6");
-//        System.out.println(Collections.max(set , Player.cardLevel));
+//        HashSet<String> set = new HashSet<String>();
+//        set.add("Spades");
+//        set.add("Hearts");
+//        set.add("Clubs");
+//        set.add("Diamonds");
+//
+//        System.out.println(Collections.max(set , Player.suitOrder));
 
-
-        try (BufferedReader br = new BufferedReader(new FileReader(args[0])))  {
-//            BufferedReader br = new BufferedReader(new FileReader(args[0]));
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(args[0]));
 
             int idx = 0;
             int playerCount = Integer.parseInt(br.readLine());
@@ -46,8 +41,18 @@ public class Game{
                 player.setCards(cardsArray);
             }
 
+            Player[] playerArray2 = new Player[2];
+            playerArray2[0] = playerArray[4];
+            playerArray2[1] = playerArray[5];
+
             Arrays.sort(playerArray);
-            System.out.println(playerArray[playerCount - 1].getName());
+
+            for (Player p:playerArray)
+                System.out.println(p.getName());
+
+//            Arrays.sort(playerArray2);
+//            System.out.println(playerArray2[0].getName());
+//            System.out.println(playerArray2[1].getName());
 
         } catch (IOException e){
             System.out.println(e.getMessage());
