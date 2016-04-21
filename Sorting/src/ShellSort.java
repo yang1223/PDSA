@@ -35,9 +35,6 @@ public class ShellSort {
             h = h/3;
         }
 
-        // call lessThan() about ~ N^2/4 times
-        // call exchange() about ~ N^2/4 times
-
         ArrayPrinter.print("After sorted : " , array);
     }
 
