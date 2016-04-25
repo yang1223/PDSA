@@ -5,38 +5,59 @@ import java.util.*;
 
 public class HandPQ {
 
-    int capacity;
-    List<Hand> list;
+    int N;
+    Hand[] pq;
 
-    HandPQ (int capacity){
-        this.capacity = capacity;
-        list = new LinkedList<Hand>();
+    HandPQ (){
+        N = 0;
+        pq = new Hand[10];
     }
 
-    public void add(Hand hand) {
-        list.add(hand);
-        if (list.size() > capacity){
-            this.deleteMin();
+    public boolean isEmpty(){
+        return N == 0;
+    }
+
+    public int size(){
+        return N;
+    }
+
+    public void insert(Hand hand) {
+        checkAndResize();
+        pq[N++] = hand;
+    }
+
+    private Hand deleteMin() {
+        int min = 0;
+        for (int i = 0 ; i < N ; i++){
+            if (pq[min].compareTo(pq[i]) == -1){
+                min = i;
+            }
         }
+        Hand temp = pq[min];
+        pq[min] = pq[N-1];
+        pq[N-1] = temp;
+        return pq[--N];
     }
 
-    public Hand deleteMin() {
-        Hand min = Collections.min(list);
-        list.remove(min);
-        return min;
+    private void checkAndResize() {
+        if (pq.length-N <= 1) {
+            Hand[] copy = new Hand[2*pq.length];
+            for (int i = 0 ; i < N ; i++){
+                copy[i] = pq[i];
+            }
+            pq = copy;
+        }
     }
 
 
     public static void main(String[] args) {
 
         try {
-
             BufferedReader br = new BufferedReader(new FileReader(args[0]));
             String[] header = br.readLine().split(",");
             int count = Integer.parseInt(header[0]);
             int target = Integer.parseInt(header[1]);
-            HandPQ pq = new HandPQ(target);
-
+            HandPQ pq = new HandPQ();
             for (int line = 0 ; line < count ; line++ ){
                 Card[] cardsArray = new Card[5];
                 String[] cardStr = br.readLine().split(",");
@@ -46,13 +67,19 @@ public class HandPQ {
                     cardsArray[i] = card;
                 }
                 Hand hand = new Hand(cardsArray);
-                pq.add(hand);
+                pq.insert(hand);
+                if (pq.size() > target){
+                    pq.deleteMin();
+                }
+                System.out.println(hand.getCardType() + ":" + pq.size());
             }
             br.close();
 
-            Card[] cards = pq.deleteMin().getCards();
-            Arrays.sort(cards);
-            System.out.println(toString(cards));
+//            Card[] cards = pq.deleteMin().getCards();
+//            Arrays.sort(cards);
+//            System.out.println(toString(cards));
+
+            System.out.println(pq.deleteMin().getCardType());
 
         } catch (IOException e){
             System.out.println(e.getMessage());
@@ -69,4 +96,5 @@ public class HandPQ {
         }
         return temp;
     }
+
 }
