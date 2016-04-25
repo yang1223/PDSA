@@ -85,6 +85,7 @@ public class Player implements Comparable<Player>{
 
         this.setCardType();
         that.setCardType();
+        that.setCardType();
         int result = CARD_TYPE_ORDER.compare(this.getCardType(), that.getCardType());
         if (result != 0){
             return result;
@@ -169,7 +170,7 @@ public class Player implements Comparable<Player>{
     private static class FaceOrder implements Comparator<String> {
         private static List<String> order;
         FaceOrder() {
-            String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","1"};
+            String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","A"};
             order = new ArrayList<String>();
             for (String face : faces) {
                 order.add(face);
