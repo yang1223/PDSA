@@ -29,7 +29,7 @@ public class HandPQ {
     private Hand deleteMin() {
         int min = 0;
         for (int i = 0 ; i < N ; i++){
-            if (pq[min].compareTo(pq[i]) == -1){
+            if (pq[min].compareTo(pq[i]) == 1){
                 min = i;
             }
         }
@@ -71,15 +71,13 @@ public class HandPQ {
                 if (pq.size() > target){
                     pq.deleteMin();
                 }
-                System.out.println(hand.getCardType() + ":" + pq.size());
+//                System.out.println(hand.getCardType() + ":" + pq.size());
             }
             br.close();
 
-//            Card[] cards = pq.deleteMin().getCards();
-//            Arrays.sort(cards);
-//            System.out.println(toString(cards));
-
-            System.out.println(pq.deleteMin().getCardType());
+            Card[] cards = pq.deleteMin().getCards();
+            Arrays.sort(cards);
+            System.out.println(toString(cards));
 
         } catch (IOException e){
             System.out.println(e.getMessage());
