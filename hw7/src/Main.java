@@ -8,30 +8,43 @@ public class Main {
     public static void main(String[] args) {
 
         int count = 5;
-        int target = 3;
+        int target = 2;
 
-        List<Hand> list = new ArrayList<Hand>();
-        for (int i = 0; i < count; i++) {
+        Hand[] list = new Hand[count];
+        for (int i = 0 ; i < count ; i++) {
             Card[] cards = deal();
-            list.add(new Hand(cards));
+            list[i] = new Hand(cards);
         }
-
 
         HandPQ pq = new HandPQ();
         for(Hand hand:list){
             pq.insert(hand);
             if (pq.size() > target) pq.deleteMin();
         }
-        
-        System.out.println("S = Spades , H = Hearts , D = Diamonds , C = Clubs");
+
+        Arrays.sort(list);
+
+//        System.out.println("S = Spades , H = Hearts , D = Diamonds , C = Clubs");
+        System.out.println("count = " + count + " , target = " + target);
+        System.out.println("===================");
         for(Hand h:list){
             System.out.println(toString(h.getCards()) + "\t" + new CardQuery(h.getCards()).getCardType());
         }
+        Hand h = pq.deleteMin();
+        System.out.println("===================");
+        System.out.println("output of priority queue:");
+        System.out.println(toString(h.getCards()) + "\t" + new CardQuery(h.getCards()).getCardType());
     }
 
 
     enum CardType {
         full_house , flush , straight , two_pair , one_pair , high_card
+    }
+
+    public static Card[] deal(){
+        CardType[] types = { CardType.full_house, CardType.flush, CardType.straight,
+                CardType.two_pair, CardType.one_pair, CardType.high_card };
+        return deal(types[(int)(Math.random()*6)]);
     }
 
     public static Card[] deal(CardType cardType){
@@ -40,12 +53,6 @@ public class Main {
             cards = dealHelper();
         }
         return cards;
-    }
-
-    public static Card[] deal(){
-        CardType[] types = { CardType.full_house, CardType.flush, CardType.straight,
-                CardType.two_pair, CardType.one_pair, CardType.high_card };
-        return deal(types[(int)(Math.random()*6)]);
     }
 
     public static Card[] dealHelper(){
@@ -73,7 +80,7 @@ public class Main {
         String sp = "";
         for (Card c:cards){
             temp += sp + c.getFace()+"("+c.getSuit().substring(0,1) +")";
-            sp = ",";
+            sp = ",\t";
         }
         return temp;
     }
@@ -94,13 +101,13 @@ public class Main {
                 if (getThrees().size() != 0) {
                     return CardType.full_house;
                 }
-                return CardType.two_pair;
+                return CardType.high_card;
             } else if (faces.size() == 3){
                 // (3,1,1) or (2,2,1)
                 if (getPairs().size() != 0) {
                     return CardType.two_pair;
                 }
-                return CardType.one_pair;
+                return CardType.high_card;
             } else if (faces.size() == 4){
                 // (2,1,1,1)
                 return CardType.one_pair;
@@ -166,5 +173,4 @@ public class Main {
             return threes;
         }
     }
-
 }

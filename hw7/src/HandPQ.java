@@ -57,7 +57,8 @@ public class HandPQ {
             String[] header = br.readLine().split(",");
             int count = Integer.parseInt(header[0]);
             int target = Integer.parseInt(header[1]);
-            HandPQ pq = new HandPQ();
+//            HandPQ pq = new HandPQ();
+            MinPQ<Hand> pq = new MinPQ<Hand>();
             for (int line = 0 ; line < count ; line++ ){
                 Card[] cardsArray = new Card[5];
                 String[] cardStr = br.readLine().split(",");
@@ -69,13 +70,15 @@ public class HandPQ {
                 Hand hand = new Hand(cardsArray);
                 pq.insert(hand);
                 if (pq.size() > target){
-                    pq.deleteMin();
+//                    pq.deleteMin();
+                    pq.delMin();
                 }
-//                System.out.println(hand.getCardType() + ":" + pq.size());
+
             }
             br.close();
 
-            Card[] cards = pq.deleteMin().getCards();
+//            Card[] cards = pq.deleteMin().getCards();
+            Card[] cards = pq.delMin().getCards();
             Arrays.sort(cards);
             System.out.println(toString(cards));
 
