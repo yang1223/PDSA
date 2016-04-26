@@ -61,7 +61,7 @@ public class Player implements Comparable<Player>{
             }
 
             // check for straight
-            String[] straights = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","1"};
+            String[] straights = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","A"};
             Set<String> faceSet = faces.keySet();
             for(int i = 0; i < straights.length - 5 ; i++){
                 Set<String> straightOne = new HashSet<String>();
@@ -170,7 +170,7 @@ public class Player implements Comparable<Player>{
     private static class FaceOrder implements Comparator<String> {
         private static List<String> order;
         FaceOrder() {
-            String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2","A"};
+            String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2"};
             order = new ArrayList<String>();
             for (String face : faces) {
                 order.add(face);
