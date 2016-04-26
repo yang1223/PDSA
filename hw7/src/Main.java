@@ -7,67 +7,48 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int randomTimes = 3;
-        boolean printSortedCase = true;
-        boolean printReverseCase = true;
+        int count = 5;
+        int target = 3;
 
-
-        CardType[] types = {CardType.full_house , CardType.flush , CardType.straight , CardType.two_pair , CardType.one_pair , CardType.high_card};
-        Card[] cards1;
-        Card[] cards2;
-        Player player1;
-        Player player2;
-
-        for (int i = 0; i < randomTimes; i++) {
-            cards1 = deal();
-            cards2 = deal();
-            player1 = new Player("player1");
-            player2 = new Player("player2");
-            player1.setCards(cards1);
-            player2.setCards(cards2);
-            printResult(player1 , player2 , cards1 , cards2);
+        List<Hand> list = new ArrayList<Hand>();
+        for (int i = 0; i < count; i++) {
+            Card[] cards = deal();
+            list.add(new Hand(cards));
         }
 
-        if(printSortedCase){
-            for (int i = 0 ; i < types.length-1 ; i++){
-                cards1 = deal(types[i]);
-                cards2 = deal(types[i+1]);
-                player1 = new Player("player1");
-                player2 = new Player("player2");
-                player1.setCards(cards1);
-                player2.setCards(cards2);
-                printResult(player1 , player2 , cards1 , cards2);
-            }
-        }
 
-        if (printReverseCase){
-            for (int i = types.length-1 ; i > 0 ; i--){
-                cards1 = deal(types[i]);
-                cards2 = deal(types[i-1]);
-                player1 = new Player("player1");
-                player2 = new Player("player2");
-                player1.setCards(cards1);
-                player2.setCards(cards2);
-                printResult(player1 , player2 , cards1 , cards2);
-            }
+        HandPQ pq = new HandPQ();
+        for(Hand hand:list){
+            pq.insert(hand);
+            if (pq.size() > target) pq.deleteMin();
         }
-
+        
+        System.out.println("S = Spades , H = Hearts , D = Diamonds , C = Clubs");
+        for(Hand h:list){
+            System.out.println(toString(h.getCards()) + "\t" + new CardQuery(h.getCards()).getCardType());
+        }
     }
+
 
     enum CardType {
         full_house , flush , straight , two_pair , one_pair , high_card
     }
 
-
     public static Card[] deal(CardType cardType){
-        Card[] cards = deal();
+        Card[] cards = dealHelper();
         while (new CardQuery(cards).getCardType() != cardType){
-            cards = deal();
+            cards = dealHelper();
         }
         return cards;
     }
 
     public static Card[] deal(){
+        CardType[] types = { CardType.full_house, CardType.flush, CardType.straight,
+                CardType.two_pair, CardType.one_pair, CardType.high_card };
+        return deal(types[(int)(Math.random()*6)]);
+    }
+
+    public static Card[] dealHelper(){
         String[] faces = {"A","K","Q","J","10","9","8","7","6","5","4","3","2"};
         String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -83,6 +64,7 @@ public class Main {
             Card c = new Card(faces[face] , suits[suit]);
             cards[i] = c;
         }
+        Arrays.sort(cards);
         return cards;
     }
 
@@ -96,15 +78,6 @@ public class Main {
         return temp;
     }
 
-    public static void printResult(Player player1 , Player player2 , Card[] cards1 , Card[] cards2){
-        System.out.println("S = Spades ,  H = Hearts , D = Diamonds , C = Clubs");
-        Arrays.sort(cards1);
-        Arrays.sort(cards2);
-        System.out.println(player1.getName() + " : " + toString(cards1) + "\t" + new CardQuery(cards1).getCardType().toString());
-        System.out.println(player2.getName() + " : " + toString(cards2) + "\t" + new CardQuery(cards2).getCardType().toString());
-        System.out.println(player1.getName() + ".compareTo(" + player2.getName()+") = " + player1.compareTo(player2));
-        System.out.println("========================");
-    }
 
     private static class CardQuery {
 
@@ -193,6 +166,5 @@ public class Main {
             return threes;
         }
     }
-
 
 }

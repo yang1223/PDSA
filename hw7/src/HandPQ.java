@@ -26,7 +26,7 @@ public class HandPQ {
         pq[N++] = hand;
     }
 
-    private Hand deleteMin() {
+    public Hand deleteMin() {
         int min = 0;
         for (int i = 0 ; i < N ; i++){
             if (pq[min].compareTo(pq[i]) == 1){
