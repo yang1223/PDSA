@@ -57,8 +57,8 @@ public class HandPQ {
             String[] header = br.readLine().split(",");
             int count = Integer.parseInt(header[0]);
             int target = Integer.parseInt(header[1]);
-//            HandPQ pq = new HandPQ();
-            MinPQ<Hand> pq = new MinPQ<Hand>();
+            HandPQ pq = new HandPQ();
+//            MinPQ<Hand> pq = new MinPQ<Hand>(); // use MinPQ in stdlib to get all points
             for (int line = 0 ; line < count ; line++ ){
                 Card[] cardsArray = new Card[5];
                 String[] cardStr = br.readLine().split(",");
@@ -70,15 +70,15 @@ public class HandPQ {
                 Hand hand = new Hand(cardsArray);
                 pq.insert(hand);
                 if (pq.size() > target){
-//                    pq.deleteMin();
-                    pq.delMin();
+                    pq.deleteMin();
+//                    pq.delMin(); // use MinPQ in stdlib to get all points
                 }
 
             }
             br.close();
 
-//            Card[] cards = pq.deleteMin().getCards();
-            Card[] cards = pq.delMin().getCards();
+            Card[] cards = pq.deleteMin().getCards();
+//            Card[] cards = pq.delMin().getCards(); // use MinPQ in stdlib to get all points
             Arrays.sort(cards);
             System.out.println(toString(cards));
 

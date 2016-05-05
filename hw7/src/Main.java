@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int count = 5;
+        int count = 10;
         int target = 2;
 
         Hand[] list = new Hand[count];
@@ -24,7 +24,7 @@ public class Main {
 
         Arrays.sort(list);
 
-//        System.out.println("S = Spades , H = Hearts , D = Diamonds , C = Clubs");
+        System.out.println("S = Spades , H = Hearts , D = Diamonds , C = Clubs");
         System.out.println("count = " + count + " , target = " + target);
         System.out.println("===================");
         for(Hand h:list){
