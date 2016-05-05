@@ -1,5 +1,5 @@
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -8,31 +8,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        boolean isDraw = false;
+        int count = 20;
+
+        boolean isDraw = true;
         Clustering.setDraw(isDraw);
 
-        List<Clustering> clusterings = new LinkedList<Clustering>();
+        List<Clustering> clusterings = new ArrayList<Clustering>();
+        // Use more clusterings.get() than clusterings.remove()
+        // Therefore, use ArrayList instead of LinkedList
 
-        clusterings.add( new Clustering( new Clustering.Point( 0.48333394289368536 , 0.005911560679846994)));
-        clusterings.add( new Clustering( new Clustering.Point( 0.9426077818967152  , 0.32182077631674877 )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.17247234067835338 , 0.3164794008683418  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.5276097034046695  , 0.7964833541635068  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.9767268015598104  , 0.6050313667459967  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.3275329713070515  , 0.66183445023924    )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.41939697123242015 , 0.9626842308775182  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.6503412904484938  , 0.18090522436533318 )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.8693410639235616  , 0.9002806396543104  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.9884473707901976  , 0.7729294134211026  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.9342720395295824  , 0.16981731086644136 )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.31270910406823915 , 0.20051767486525673 )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.467900409978538   , 0.4875390545441505  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.30548287907410765 , 0.34467014393926365 )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.16580772939460164 , 0.22464710690266565 )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.2854506657767861  , 0.5559388309103223  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.6009118467985421  , 0.6091088164052958  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.2185378455860706  , 0.4382159663795573  )));
-        clusterings.add( new Clustering( new Clustering.Point( 0.2066103278341087  , 0.49084609413621205 )));
-        clusterings.add(new Clustering(new Clustering.Point(0.1320913570902731, 0.3210377206614142)));
+        for (int i = 0; i < count; i++) {
+            clusterings.add( new Clustering( new Clustering.Point( Math.random() , Math.random())));
+        }
+
 
         while(clusterings.size() > 3){
             double minDistance = clusterings.get(0).distanceTo(clusterings.get(1));
@@ -85,7 +73,6 @@ public class Main {
             System.out.println(String.format("%d %.2f %.2f",c.size() , c.getX() , c.getY() ));
         }
         System.out.println(String.format("%.2f",min));
-
 
     }
 }
