@@ -73,11 +73,18 @@ public class Clustering implements Comparable<Clustering> {
 
     @Override
     public int compareTo(Clustering o) {
-        if(this.size() < o.size()) return 1;
-        else if(this.size() > o.size()) return -1;
-        else return 0;
+        if (this.size() < o.size()) return 1;
+        else if (this.size() > o.size()) return -1;
+        else {
+            if (this.getX() > o.getX()) return 1;
+            else if (this.getX() < o.getX()) return -1;
+            else {
+                if (this.getY() > o.getY()) return 1;
+                else if (this.getY() < o.getY()) return -1;
+                else return 0;
+            }
+        }
     }
-
 
     public static class Point {
         private double x;
@@ -126,7 +133,6 @@ public class Clustering implements Comparable<Clustering> {
                 }
                 clusterings.add(Clustering.merge(clusterings.remove(min2) , clusterings.remove(min1)));
             }
-
 
             Clustering.Point point1 = clusterings.get(0).getPoints().get(0);
             Clustering.Point point2 = clusterings.get(1).getPoints().get(0);

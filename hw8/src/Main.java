@@ -21,7 +21,6 @@ public class Main {
             clusterings.add( new Clustering( new Clustering.Point( Math.random() , Math.random())));
         }
 
-
         while(clusterings.size() > 3){
             double minDistance = clusterings.get(0).distanceTo(clusterings.get(1));
             int min1 = 0;
@@ -38,7 +37,6 @@ public class Main {
             }
             clusterings.add(Clustering.merge(clusterings.remove(min2) , clusterings.remove(min1)));
         }
-
 
         Clustering.Point point1 = clusterings.get(0).getPoints().get(0);
         Clustering.Point point2 = clusterings.get(1).getPoints().get(0);

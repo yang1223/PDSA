@@ -9,9 +9,9 @@ import java.util.List;
 public class Test {
     public static void main(String[] args) {
         try {
-            int count = 10000;
-            String inTxt = "hw8.0002.r03525008.in.txt";
-            String outTxt = "hw8.0002.r03525008.out.txt";
+            int count = 100;
+            String inTxt = "hw8.0001.r03525008.in.txt";
+            String outTxt = "hw8.0001.r03525008.out.txt";
 
             FileWriter fw = new FileWriter(inTxt);
             fw.write(count+System.getProperty("line.separator"));
@@ -24,7 +24,6 @@ public class Test {
             fw = new FileWriter(outTxt);
             fw.write(outputContent);
             fw.close();
-
 
         } catch ( IOException e) {
             System.out.println(e.getMessage());
