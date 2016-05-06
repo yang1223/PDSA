@@ -44,8 +44,8 @@ public class Clustering implements Comparable<Clustering> {
 
     public static Clustering merge(Clustering c1 , Clustering c2){
         Clustering clustering = new Clustering();
-        double sumX = 0;
-        double sumY = 0;
+        double sumX = 0.0;
+        double sumY = 0.0;
         for(Point p:c1.points){
             clustering.points.add(p);
             sumX += p.getX();
@@ -72,18 +72,15 @@ public class Clustering implements Comparable<Clustering> {
     }
 
     @Override
-    public int compareTo(Clustering o) {
-        if (this.size() < o.size()) return 1;
-        else if (this.size() > o.size()) return -1;
-        else {
-            if (this.getX() > o.getX()) return 1;
-            else if (this.getX() < o.getX()) return -1;
-            else {
-                if (this.getY() > o.getY()) return 1;
-                else if (this.getY() < o.getY()) return -1;
-                else return 0;
-            }
-        }
+    public int compareTo(Clustering that) {
+        if (this.size() < that.size()) return 1;
+        else if (this.size() > that.size()) return -1;
+        else if (this.getX() > that.getX()) return 1;
+        else if (this.getX() < that.getX()) return -1;
+        else if (this.getY() > that.getY()) return 1;
+        else if (this.getY() < that.getY()) return -1;
+        else return 0;
+
     }
 
     public static class Point {
@@ -113,59 +110,78 @@ public class Clustering implements Comparable<Clustering> {
             for (int i = 0; i < count; i++) {
                 String[] line = br.readLine().split("\\s");
                 Point p = new Point(Double.parseDouble(line[0]) , Double.parseDouble(line[1]));
-                clusterings.add( new Clustering(p));
+                clusterings.add( new Clustering(p) );
             }
             br.close();
 
-            while(clusterings.size() > 3){
-                double minDistance = clusterings.get(0).distanceTo(clusterings.get(1));
-                int min1 = 0;
-                int min2 = 1;
-                for (int i = 0; i < clusterings.size(); i++) {
-                    for (int j = i+1 ; j < clusterings.size(); j++) {
-                        double newDistance = clusterings.get(i).distanceTo(clusterings.get(j));
-                        if (minDistance > newDistance){
-                            minDistance = newDistance;
-                            min1 = i;
-                            min2 = j;
+            if (clusterings.size() == 0) {
+                System.out.println("0.00");
+            } else if (clusterings.size() == 1) {
+                Clustering c = clusterings.get(0);
+                System.out.println(String.format("%d %.2f %.2f", c.size(), c.getX(), c.getY()));
+                System.out.println("0.00");
+            } else if (clusterings.size() == 2) {
+                Clustering.Point point1 = clusterings.get(0).getPoints().get(0);
+                Clustering.Point point2 = clusterings.get(1).getPoints().get(0);
+                double min = point1.distanceTo(point2);
+                Clustering[] clusteringsArray = clusterings.toArray(new Clustering[2]);
+                Arrays.sort(clusteringsArray);
+                for(Clustering c:clusteringsArray){
+                    System.out.println(String.format("%d %.2f %.2f" , c.size() , c.getX() , c.getY() ));
+                }
+                System.out.println(String.format("%.2f", min));
+
+            } else {
+                while(clusterings.size() > 3){
+                    double minDistance = clusterings.get(0).distanceTo(clusterings.get(1));
+                    int min1 = 0;
+                    int min2 = 1;
+                    for (int i = 0; i < clusterings.size(); i++) {
+                        for (int j = i+1 ; j < clusterings.size(); j++) {
+                            double newDistance = clusterings.get(i).distanceTo(clusterings.get(j));
+                            if (minDistance > newDistance){
+                                minDistance = newDistance;
+                                min1 = i;
+                                min2 = j;
+                            }
                         }
                     }
+                    clusterings.add(Clustering.merge(clusterings.remove(min2) , clusterings.remove(min1)));
                 }
-                clusterings.add(Clustering.merge(clusterings.remove(min2) , clusterings.remove(min1)));
-            }
 
-            Clustering.Point point1 = clusterings.get(0).getPoints().get(0);
-            Clustering.Point point2 = clusterings.get(1).getPoints().get(0);
-            double min = point1.distanceTo(point2);
-            for (int i = 0; i < clusterings.size(); i++) {
-                List<Clustering.Point> points1 = clusterings.get(i).getPoints();
-                for (int j = i+1 ; j < clusterings.size(); j++) {
-                    List<Clustering.Point> points2 = clusterings.get(j).getPoints();
-                    for (Point p1 : points1) {
-                        for (Point p2 : points2) {
-                            if (p1.distanceTo(p2) < min) {
-                                min = p1.distanceTo(p2);
-                                point1 = p1;
-                                point2 = p2;
+                Clustering.Point point1 = clusterings.get(0).getPoints().get(0);
+                Clustering.Point point2 = clusterings.get(1).getPoints().get(0);
+                double min = point1.distanceTo(point2);
+                for (int i = 0; i < clusterings.size(); i++) {
+                    List<Clustering.Point> points1 = clusterings.get(i).getPoints();
+                    for (int j = i+1 ; j < clusterings.size(); j++) {
+                        List<Clustering.Point> points2 = clusterings.get(j).getPoints();
+                        for (Clustering.Point p1 : points1) {
+                            for (Clustering.Point p2 : points2) {
+                                if (p1.distanceTo(p2) < min) {
+                                    min = p1.distanceTo(p2);
+                                    point1 = p1;
+                                    point2 = p2;
+                                }
                             }
                         }
                     }
                 }
+
+
+                if(isDraw){
+                    StdDraw.setPenColor(StdDraw.BLUE);
+                    StdDraw.line(point1.getX() , point1.getY() , point2.getX() , point2.getY());
+                }
+
+                Clustering[] clusteringsArray = clusterings.toArray(new Clustering[clusterings.size()]);
+                Arrays.sort(clusteringsArray);
+
+                for(Clustering c:clusteringsArray){
+                    System.out.println(String.format("%d %.2f %.2f" , c.size() , c.getX() , c.getY() ));
+                }
+                System.out.println(String.format("%.2f", min));
             }
-
-            if(isDraw){
-                StdDraw.setPenColor(StdDraw.BLUE);
-                StdDraw.line(point1.getX() , point1.getY() , point2.getX() , point2.getY());
-            }
-
-            Clustering[] clusteringsArray = clusterings.toArray(new Clustering[clusterings.size()]);
-            Arrays.sort(clusteringsArray);
-
-            for(Clustering c:clusteringsArray){
-                System.out.println(String.format("%d %.2f %.2f",c.size() , c.getX() , c.getY() ));
-            }
-            System.out.println(String.format("%.2f", min));
-
 
         } catch (IOException e){
             System.out.println(e.getMessage());
