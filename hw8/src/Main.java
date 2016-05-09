@@ -26,8 +26,7 @@ public class Main {
 
         args = new String[1];
         args[0] = tempTxt;
-        Clustering.
-                main(args);
+        Clustering.main(args);
         System.out.println("===============");
         ClusteringH.main(args);
 
