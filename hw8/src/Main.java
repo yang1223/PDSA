@@ -26,10 +26,14 @@ public class Main {
 
         args = new String[1];
         args[0] = tempTxt;
+
+        System.out.println("===============");
+        System.out.println("Correct answer:");
+        ClusteringY.main(args);
+        System.out.println("===============");
+        System.out.println("Your answer:");
         Clustering.main(args);
         System.out.println("===============");
-        ClusteringH.main(args);
-
         File file = new File(tempTxt);
         if(!file.delete()) System.out.println(tempTxt + " still exists!");
 
