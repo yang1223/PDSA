@@ -4,16 +4,22 @@
 public class Main {
     public static void main(String[] args) {
 
-        String expression = "(4+(((4*2)/2)/3))";
-        Expression e = new Expression();
-        e.Infix2BT(expression);
-        Node[] nodes = e.PrintPostfix();
-
-        for(Node n:nodes){
+        String infix = "(4+(((4*2)/2)/3))";
+        Expression expression = new Expression();
+        expression.Infix2BT(infix);
+        Node[] prefixNodes = expression.PrintPrefix();
+        for(Node n:prefixNodes){
             System.out.print(n.getValue());
         }
         System.out.println("");
-        System.out.println(e.Evaluation());
+
+        Node[] postfixNodes = expression.PrintPostfix();
+        for(Node n:postfixNodes){
+            System.out.print(n.getValue());
+        }
+        System.out.println("");
+
+        System.out.println(expression.Evaluation());
 
     }
 }
