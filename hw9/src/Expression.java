@@ -50,6 +50,7 @@ public class Expression{
     }
 
     public Node[] PrintPrefix(){
+        if(root == null) throw new NullPointerException();
         List<Node> list = new ArrayList<Node>();
         PrintPrefixHelper(list, root);
         return list.toArray(new Node[list.size()]);
@@ -63,6 +64,7 @@ public class Expression{
     }
 
     public Node[] PrintPostfix(){
+        if(root == null) throw new NullPointerException();
         List<Node> list = new ArrayList<Node>();
         PrintPostfixHelper(list, root);
         return list.toArray(new Node[list.size()]);
@@ -76,20 +78,27 @@ public class Expression{
     }
 
     public double Evaluation(){
+        if(root == null) throw new NullPointerException();
         Node[] nodes =  this.PrintPostfix();
         Stack<Double> values = new Stack<Double>();
         for (Node node:nodes) {
             String str = node.getValue();
-            if (str.equals("+")){
-                values.push( values.pop() + values.pop() );
-            } else if (str.equals("-")){
-                values.push( - values.pop() + values.pop() );
-            } else if (str.equals("*")){
-                values.push( values.pop() * values.pop() );
-            } else if (str.equals("/")){
-                values.push( 1/values.pop() * values.pop() );
-            } else {
-                values.push(Double.parseDouble(str));
+            switch (str) {
+                case "+":
+                    values.push(values.pop() + values.pop());
+                    break;
+                case "-":
+                    values.push(-values.pop() + values.pop());
+                    break;
+                case "*":
+                    values.push(values.pop() * values.pop());
+                    break;
+                case "/":
+                    values.push(1 / values.pop() * values.pop());
+                    break;
+                default:
+                    values.push(Double.parseDouble(str));
+                    break;
             }
         }
         return values.pop();
