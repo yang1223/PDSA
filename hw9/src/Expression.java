@@ -79,6 +79,26 @@ public class Expression{
 
     public double Evaluation(){
         if(root == null) throw new NullPointerException();
+        return EvaluationHelper(root);
+    }
+
+    private double EvaluationHelper(Node root){
+        switch (root.getValue()) {
+            case "+":
+                return EvaluationHelper(root.getLeft()) + EvaluationHelper(root.getRight());
+            case "-":
+                return EvaluationHelper(root.getLeft()) - EvaluationHelper(root.getRight());
+            case "*":
+                return EvaluationHelper(root.getLeft()) * EvaluationHelper(root.getRight());
+            case "/":
+                return EvaluationHelper(root.getLeft()) / EvaluationHelper(root.getRight());
+            default:
+                return Double.parseDouble(root.getValue());
+        }
+    }
+
+    public double Evaluation_NonRecursive(){
+        if(root == null) throw new NullPointerException();
         Node[] nodes =  this.PrintPostfix();
         Stack<Double> values = new Stack<Double>();
         for (Node node:nodes) {
@@ -103,4 +123,5 @@ public class Expression{
         }
         return values.pop();
     }
+
 }

@@ -4,9 +4,9 @@
 public class Main {
     public static void main(String[] args) {
 
-//        String infix = "(4+(((4*2)/2)/3))";
+        String infix = "(4+(((4*2)/2)/3))";
 //        String infix = "(21/2.1)";
-        String infix = "";
+//        String infix = "";
         Expression expression = new Expression();
         expression.Infix2BT(infix);
         Node[] prefixNodes = expression.PrintPrefix();
