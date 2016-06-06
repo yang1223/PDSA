@@ -34,6 +34,7 @@ public class FindNeighbors {
         }
     }
 
+
     // TODO
     // the result should be sorted accordingly to their distances to the query, from small to large
     // please use the Point2D from algs4.jar 
@@ -172,6 +173,7 @@ public class FindNeighbors {
 
         public void setDistance(double distance) { this.distance = distance; }
     }
+
 
 }
 
