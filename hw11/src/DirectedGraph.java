@@ -22,6 +22,7 @@ public class DirectedGraph {
 
     public void addEdge(int v , int w){
         adjacencies.get(v).add(w);
+//        adjacencies.get(w).add(v); // add this line for UndirectedGraph
     }
 
     public List<Integer> getAdjacencies(int v){
