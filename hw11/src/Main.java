@@ -28,7 +28,7 @@ public class Main {
                 if (p.getX() + p.getY() > t.getX() + t.getY()) target = i;
             }
 
-            Set<Double> distanceSet = new HashSet<>();
+            Set<Double> distanceSet = new HashSet<Double>();
             for (int i = 0; i < points.length; i++) {
                 Point p1 = points[i];
                 for (int j = 0; j < points.length; j++) {
